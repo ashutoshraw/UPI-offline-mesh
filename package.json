@@ -1,0 +1,23 @@
+{
+  "name": "upi-offline-mesh-js",
+  "version": "1.0.0",
+  "description": "UPI Offline Mesh demo (JavaScript/Node port) - offline payments routed through a simulated Bluetooth mesh, hybrid RSA+AES encryption, idempotent settlement.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "license": "MIT"
+}

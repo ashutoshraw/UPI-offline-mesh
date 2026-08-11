@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UPI Offline Mesh — Demo Console</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="28" height="28">
+        <circle cx="8" cy="8" r="3.4" fill="currentColor"/>
+        <circle cx="32" cy="10" r="3.4" fill="currentColor"/>
+        <circle cx="20" cy="30" r="3.4" fill="currentColor"/>
+        <circle cx="34" cy="30" r="2.4" fill="currentColor" opacity="0.55"/>
+        <line x1="8" y1="8" x2="20" y2="30" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+        <line x1="32" y1="10" x2="20" y2="30" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+        <line x1="20" y1="30" x2="34" y2="30" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 2" opacity="0.85"/>
+      </svg>
+    </span>
+    <div>
+      <h1>UPI Offline Mesh</h1>
+      <p class="brand-sub">mesh-routed deferred settlement — demo console</p>
+    </div>
+  </div>
+  <div class="topbar-status">
+    <span class="dot" id="connDot"></span>
+    <span id="connLabel">checking backend…</span>
+  </div>
+</header>
+
+<main>
+
+  <section class="lede">
+    <p>
+      No signal in the basement. You send ₹500. Your phone encrypts it, hands it to whoever's
+      nearby, and it hops device to device until one phone walks outside and quietly uploads it.
+      This console drives that whole path by hand — one hop at a time — against a live backend.
+    </p>
+  </section>
+
+  <section class="panel-row">
+
+    <div class="panel compose">
+      <h2><span class="idx">01</span> Compose a payment</h2>
+      <p class="panel-hint">Simulates the sender's own phone: builds the instruction, encrypts it with the server's public key, hands it to <code>phone-alice</code>.</p>
+      <form id="composeForm">
+        <label>
+          Sender
+          <select name="sender" id="senderSelect"></select>
+        </label>
+        <label>
+          Receiver
+          <select name="receiver" id="receiverSelect"></select>
+        </label>
+        <label>
+          Amount (₹)
+          <input type="number" name="amount" min="1" value="500" required />
+        </label>
+        <label>
+          PIN
+          <input type="password" name="pin" value="1234" required />
+        </label>
+        <button type="submit" class="btn-primary">Inject into mesh</button>
+      </form>
+      <p class="feedback" id="composeFeedback"></p>
+    </div>
+
+    <div class="panel mesh">
+      <h2><span class="idx">02</span> Gossip &amp; bridge</h2>
+      <p class="panel-hint">Each round, every device broadcasts its packets to everyone in range. TTL drops per hop. Only <code>phone-bridge</code> has signal.</p>
+      <div class="mesh-actions">
+        <button type="button" class="btn-secondary" id="gossipBtn">Run gossip round</button>
+        <button type="button" class="btn-secondary" id="flushBtn">Bridges upload to backend</button>
+        <button type="button" class="btn-ghost" id="resetBtn">Reset mesh</button>
+      </div>
+      <div class="device-grid" id="deviceGrid"></div>
+      <p class="feedback" id="meshFeedback"></p>
+    </div>
+
+  </section>
+
+  <section class="panel-row">
+
+    <div class="panel wide">
+      <h2><span class="idx">03</span> Account balances</h2>
+      <table class="data-table" id="accountsTable">
+        <thead><tr><th>Account</th><th>VPA</th><th>Balance</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="panel wide">
+      <h2><span class="idx">04</span> Transaction ledger</h2>
+      <table class="data-table" id="txTable">
+        <thead><tr><th>ID</th><th>From → To</th><th>Amount</th><th>Status</th><th>Packet hash</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <section class="panel-row">
+    <div class="panel wide">
+      <h2><span class="idx">05</span> Server key</h2>
+      <p class="panel-hint">RSA-2048 public key, regenerated fresh every boot. Real bridge nodes would encrypt against this.</p>
+      <code class="keydump" id="serverKey">—</code>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Demo project — JavaScript/Node port. No real money, no real UPI network. See README for the honest limitations.</p>
+</footer>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
